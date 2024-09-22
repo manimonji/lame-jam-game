@@ -1,0 +1,22 @@
+[gd_scene load_steps=5 format=3 uid="uid://dqfiurxgygg6t"]
+
+[ext_resource type="Script" path="res://follower_enemy.gd" id="1_qcp2w"]
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_uilnl"]
+albedo_color = Color(0.622068, 0, 0.0549262, 1)
+
+[sub_resource type="BoxMesh" id="BoxMesh_ejh3d"]
+material = SubResource("StandardMaterial3D_uilnl")
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_6jt5d"]
+
+[node name="FollowerEnemy" type="RigidBody3D"]
+collision_layer = 4
+collision_mask = 5
+script = ExtResource("1_qcp2w")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="."]
+mesh = SubResource("BoxMesh_ejh3d")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="."]
+shape = SubResource("BoxShape3D_6jt5d")

@@ -1,0 +1,53 @@
+[gd_scene load_steps=10 format=3 uid="uid://dqfiurxgygg6t"]
+
+[ext_resource type="Script" path="res://assets/scirpts/follower_movement_component.gd" id="1_8h2km"]
+[ext_resource type="Script" path="res://assets/scirpts/velocity_component.gd" id="2_dn3vo"]
+[ext_resource type="Script" path="res://assets/scirpts/gravity_component.gd" id="3_unsmb"]
+[ext_resource type="Script" path="res://restart_area.gd" id="4_3bfjo"]
+
+[sub_resource type="GDScript" id="GDScript_iruun"]
+script/source = "
+"
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_uilnl"]
+albedo_color = Color(0.622068, 0, 0.0549262, 1)
+
+[sub_resource type="BoxMesh" id="BoxMesh_ejh3d"]
+material = SubResource("StandardMaterial3D_uilnl")
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_6jt5d"]
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_2acil"]
+size = Vector3(1.1, 1.1, 1.1)
+
+[node name="FollowerEnemy" type="RigidBody3D"]
+collision_layer = 4
+collision_mask = 5
+script = SubResource("GDScript_iruun")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="."]
+mesh = SubResource("BoxMesh_ejh3d")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="."]
+shape = SubResource("BoxShape3D_6jt5d")
+
+[node name="FollowerMovementComponent" type="Node" parent="."]
+script = ExtResource("1_8h2km")
+
+[node name="VelocityComponent" type="Node" parent="."]
+script = ExtResource("2_dn3vo")
+
+[node name="GravityComponent" type="Node" parent="." node_paths=PackedStringArray("velocity_component")]
+script = ExtResource("3_unsmb")
+gravity = Vector3(0, -10, 0)
+velocity_component = NodePath("../VelocityComponent")
+
+[node name="Area3D" type="Area3D" parent="."]
+collision_layer = 0
+collision_mask = 2
+script = ExtResource("4_3bfjo")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Area3D"]
+shape = SubResource("BoxShape3D_2acil")
+
+[connection signal="body_entered" from="Area3D" to="Area3D" method="_on_body_entered"]

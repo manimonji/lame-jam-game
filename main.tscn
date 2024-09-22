@@ -1,0 +1,77 @@
+[gd_scene load_steps=9 format=3 uid="uid://crftkaj2td5qg"]
+
+[ext_resource type="Script" path="res://main.gd" id="1_3x1y8"]
+[ext_resource type="PackedScene" uid="uid://ww01omwdwjci" path="res://player.tscn" id="1_mi6uc"]
+[ext_resource type="PackedScene" uid="uid://dqfiurxgygg6t" path="res://follower_enemy.tscn" id="2_ould2"]
+[ext_resource type="PackedScene" uid="uid://cyh0btrsibsct" path="res://land_mine.tscn" id="4_t4mpr"]
+[ext_resource type="PackedScene" uid="uid://byn0fga6moc6a" path="res://invinsibility_power_up.tscn" id="5_dhrju"]
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_t5jas"]
+size = Vector3(20, 50, 20)
+
+[sub_resource type="BoxMesh" id="BoxMesh_sj00s"]
+size = Vector3(20, 50, 20)
+
+[sub_resource type="Curve3D" id="Curve3D_tsstd"]
+_data = {
+"points": PackedVector3Array(0, 0, 0, 0, 0, 0, -8.32571, 0, 7.91238, 0, 0, 0, 0, 0, 0, 8.44381, 0, 8.03047, 0, 0, 0, 0, 0, 0, 7.79428, 0, -8.03047, 0, 0, 0, 0, 0, 0, -8.68, 0, -8.14857, 0, 0, 0, 0, 0, 0, -8.32571, 0, 7.91238),
+"tilts": PackedFloat32Array(0, 0, 0, 0, 0)
+}
+point_count = 5
+
+[node name="Main" type="Node"]
+script = ExtResource("1_3x1y8")
+mine_scene = ExtResource("4_t4mpr")
+enemy_scene = ExtResource("2_ould2")
+mine_spawn_randomness = 5.0
+
+[node name="Ground" type="StaticBody3D" parent="."]
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Ground"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -25, 0)
+shape = SubResource("BoxShape3D_t5jas")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="Ground"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -25, 0)
+mesh = SubResource("BoxMesh_sj00s")
+
+[node name="Player" parent="." instance=ExtResource("1_mi6uc")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.79484, 0)
+JUMP_VELOCITY = 20
+gravity = Vector3(0, -40, 0)
+throw_power = 20.0
+
+[node name="DirectionalLight3D" type="DirectionalLight3D" parent="."]
+transform = Transform3D(0.973946, 0.170616, 0.149399, -0.181997, 0.194993, 0.963771, 0.135303, -0.965851, 0.220964, 5.64938, 21.6186, 9.62728)
+light_indirect_energy = 0.0
+light_volumetric_fog_energy = 16.0
+
+[node name="FollowerEnemy" parent="." node_paths=PackedStringArray("target") instance=ExtResource("2_ould2")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2.0157, 5.79069)
+target = NodePath("../Player")
+
+[node name="Path3D" type="Path3D" parent="."]
+curve = SubResource("Curve3D_tsstd")
+
+[node name="PathFollow3D" type="PathFollow3D" parent="Path3D"]
+transform = Transform3D(-0.00704187, 0, -0.999969, 0, 1, 0, 0.999969, 0, -0.00704187, -8.32571, 0, 7.91238)
+
+[node name="EnemySpawnTimer" type="Timer" parent="."]
+autostart = true
+
+[node name="LandMine" parent="." instance=ExtResource("4_t4mpr")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 8.39683, 1.49609, 0)
+
+[node name="MineSpawnTimer" type="Timer" parent="."]
+autostart = true
+
+[node name="MineSpawnBaseMarker" type="Marker3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 29.9696, 0)
+
+[node name="InvinsibilityPowerUp" parent="." instance=ExtResource("5_dhrju")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.80633, 3.32893)
+
+[connection signal="timeout" from="EnemySpawnTimer" to="." method="_on_enemy_spawn_timer_timeout"]
+[connection signal="timeout" from="MineSpawnTimer" to="." method="_on_mine_spawn_timer_timeout"]
+
+[editable path="FollowerEnemy"]

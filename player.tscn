@@ -1,0 +1,30 @@
+[gd_scene load_steps=4 format=3 uid="uid://ww01omwdwjci"]
+
+[ext_resource type="Script" path="res://assets/scirpts/player.gd" id="1_g8yj4"]
+
+[sub_resource type="CapsuleMesh" id="CapsuleMesh_4y10r"]
+
+[sub_resource type="CapsuleShape3D" id="CapsuleShape3D_uxsld"]
+
+[node name="Player" type="CharacterBody3D"]
+collision_layer = 2
+script = ExtResource("1_g8yj4")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="."]
+mesh = SubResource("CapsuleMesh_4y10r")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="."]
+shape = SubResource("CapsuleShape3D_uxsld")
+
+[node name="Camera3D" type="Camera3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 0.812908, 0.582393, 0, -0.582393, 0.812908, 0, 16.6895, 17.1658)
+metadata/_edit_group_ = true
+
+[node name="RestartArea" type="Area3D" parent="."]
+collision_layer = 0
+collision_mask = 4
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="RestartArea"]
+shape = SubResource("CapsuleShape3D_uxsld")
+
+[connection signal="body_entered" from="RestartArea" to="." method="_on_restart_area_body_entered"]

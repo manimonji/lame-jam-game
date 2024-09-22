@@ -1,0 +1,43 @@
+[gd_scene load_steps=6 format=3 uid="uid://cyh0btrsibsct"]
+
+[ext_resource type="Script" path="res://land_mine.gd" id="1_n6shc"]
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_bowtl"]
+albedo_color = Color(0.34881, 0.0756629, 0.976901, 1)
+
+[sub_resource type="CylinderMesh" id="CylinderMesh_8imh8"]
+material = SubResource("StandardMaterial3D_bowtl")
+height = 0.125
+
+[sub_resource type="CylinderShape3D" id="CylinderShape3D_yy2e3"]
+height = 0.125
+
+[sub_resource type="SphereShape3D" id="SphereShape3D_xlr3v"]
+radius = 2.5
+
+[node name="LandMine" type="RigidBody3D"]
+collision_layer = 8
+script = ExtResource("1_n6shc")
+explotion_power = 10.0
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="."]
+mesh = SubResource("CylinderMesh_8imh8")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="."]
+shape = SubResource("CylinderShape3D_yy2e3")
+
+[node name="Area3D" type="Area3D" parent="."]
+collision_layer = 0
+collision_mask = 6
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Area3D"]
+shape = SubResource("CylinderShape3D_yy2e3")
+
+[node name="ExplotionArea" type="Area3D" parent="."]
+collision_layer = 0
+collision_mask = 4
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="ExplotionArea"]
+shape = SubResource("SphereShape3D_xlr3v")
+
+[connection signal="body_entered" from="Area3D" to="." method="_on_body_entered"]
