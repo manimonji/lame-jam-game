@@ -8,6 +8,7 @@ var follow_enabled = true
 
 @onready var destroy_timer: Timer = $DestroyTimer
 @onready var dust: GPUParticles3D = $Dust
+@onready var mow_audio = $MowAudio
 
 func look_follow(state: PhysicsDirectBodyState3D, current_transform: Transform3D, target_position: Vector3) -> void:
 	var forward_local_axis: Vector3 = Vector3(1, 0, 0)
@@ -28,7 +29,9 @@ func _integrate_forces(state):
 		look_follow(state, global_transform, global_position + desired_direction)
 		apply_force(desired_direction * speed)
 		destroy_timer.stop()
-	
+
+func die():
+	mow_audio.play()
 
 func _on_destroy_timer_timeout() -> void:
 	queue_free()

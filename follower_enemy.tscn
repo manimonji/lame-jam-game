@@ -1,14 +1,11 @@
 [gd_scene load_steps=10 format=3 uid="uid://dqfiurxgygg6t"]
 
 [ext_resource type="Script" path="res://follower_enemy.gd" id="1_qcp2w"]
-
-[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_uilnl"]
-albedo_color = Color(0.622068, 0, 0.0549262, 1)
-
-[sub_resource type="BoxMesh" id="BoxMesh_ejh3d"]
-material = SubResource("StandardMaterial3D_uilnl")
+[ext_resource type="ArrayMesh" uid="uid://c5di13p336h83" path="res://bull.res" id="2_810o3"]
+[ext_resource type="AudioStream" uid="uid://cloe7pwhbi7j6" path="res://Mudchute_cow_1.ogg" id="3_wuiyc"]
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_6jt5d"]
+size = Vector3(2, 1.3, 1)
 
 [sub_resource type="Curve" id="Curve_oqihu"]
 _data = [Vector2(0, 1), 0.0, 0.0, 0, 0, Vector2(0.73913, 1), 0.0, 0.0, 0, 0, Vector2(1, 0), 0.0, 0.0, 0, 0]
@@ -43,10 +40,8 @@ contact_monitor = true
 max_contacts_reported = 1
 script = ExtResource("1_qcp2w")
 
-[node name="MeshInstance3D" type="MeshInstance3D" parent="."]
-mesh = SubResource("BoxMesh_ejh3d")
-
 [node name="CollisionShape3D" type="CollisionShape3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.495321, 0.134463, 0)
 shape = SubResource("BoxShape3D_6jt5d")
 
 [node name="DestroyTimer" type="Timer" parent="."]
@@ -58,7 +53,16 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.480203, -0.335306, 0)
 amount = 64
 lifetime = 0.75
 fixed_fps = 60
+interpolate = false
 process_material = SubResource("ParticleProcessMaterial_xoqpo")
 draw_pass_1 = SubResource("SphereMesh_l5pf2")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="."]
+transform = Transform3D(0.0174524, 0, -0.999848, 0, 1, 0, 0.999848, 0, 0.0174524, 0, 0, 0)
+mesh = ExtResource("2_810o3")
+
+[node name="MowAudio" type="AudioStreamPlayer3D" parent="."]
+stream = ExtResource("3_wuiyc")
+volume_db = -5.0
 
 [connection signal="timeout" from="DestroyTimer" to="." method="_on_destroy_timer_timeout"]

@@ -1,33 +1,26 @@
-[gd_scene load_steps=8 format=3 uid="uid://cyh0btrsibsct"]
+[gd_scene load_steps=7 format=3 uid="uid://cyh0btrsibsct"]
 
 [ext_resource type="Script" path="res://land_mine.gd" id="1_n6shc"]
 [ext_resource type="PackedScene" uid="uid://b3jx7g561ruku" path="res://explosion.tscn" id="2_84vbv"]
 [ext_resource type="PackedScene" uid="uid://twylos0g27lx" path="res://explosion_sound.tscn" id="3_t32bh"]
-
-[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_bowtl"]
-albedo_color = Color(0.34881, 0.0756629, 0.976901, 1)
-
-[sub_resource type="CylinderMesh" id="CylinderMesh_8imh8"]
-material = SubResource("StandardMaterial3D_bowtl")
-height = 0.125
+[ext_resource type="PackedScene" uid="uid://y4gqsfy23sy7" path="res://mine.fbx" id="4_g38ia"]
 
 [sub_resource type="CylinderShape3D" id="CylinderShape3D_yy2e3"]
-height = 0.125
+height = 0.3
 
 [sub_resource type="SphereShape3D" id="SphereShape3D_xlr3v"]
 radius = 2.5
 
-[node name="LandMine" type="RigidBody3D"]
+[node name="LandMine" type="RigidBody3D" groups=["mines"]]
+transform = Transform3D(-1, 8.74228e-08, 0, -8.74228e-08, -1, 0, 0, 0, 1, 0, 0, 0)
 collision_layer = 8
 script = ExtResource("1_n6shc")
 explotion_power = 10.0
 explosion_scene = ExtResource("2_84vbv")
 explosion_sound_scene = ExtResource("3_t32bh")
 
-[node name="MeshInstance3D" type="MeshInstance3D" parent="."]
-mesh = SubResource("CylinderMesh_8imh8")
-
 [node name="CollisionShape3D" type="CollisionShape3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.0502676, 0)
 shape = SubResource("CylinderShape3D_yy2e3")
 
 [node name="Area3D" type="Area3D" parent="."]
@@ -39,9 +32,12 @@ shape = SubResource("CylinderShape3D_yy2e3")
 
 [node name="ExplotionArea" type="Area3D" parent="."]
 collision_layer = 0
-collision_mask = 4
+collision_mask = 12
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="ExplotionArea"]
 shape = SubResource("SphereShape3D_xlr3v")
+
+[node name="mine" parent="." instance=ExtResource("4_g38ia")]
+transform = Transform3D(0.5, 0, 0, 0, 0.5, 0, 0, 0, 0.5, 0, 0, 0)
 
 [connection signal="body_entered" from="Area3D" to="." method="_on_body_entered"]

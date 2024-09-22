@@ -1,5 +1,7 @@
 extends CharacterBody3D
 
+signal died
+
 var invinsible = false:
 	set(value):
 		invinsible = value
@@ -14,6 +16,8 @@ const SPEED = 5.0
 @export var throw_power:= 1.0
 
 @onready var jump_particles: GPUParticles3D = $JumpParticles
+@onready var camera_3d = $Camera3D
+@onready var mesh = $Mesh
 
 func _process(delta):
 	# Add the gravity.
@@ -39,10 +43,18 @@ func _process(delta):
 	move_and_slide()
 
 
-func _on_restart_area_body_entered(body):
+func _on_death_area_body_entered(body):
 	if invinsible:
 		if body is RigidBody3D:
 			body.follow_enabled = false
 			body.apply_impulse((body.global_position - global_position).normalized() * throw_power, global_position)
 	else:
-		get_tree().reload_current_scene()
+		died.emit()
+
+
+func _on_died():
+	var tween = get_tree().create_tween()
+	tween.set_pause_mode(Tween.TWEEN_PAUSE_PROCESS)
+	tween.tween_property(camera_3d, "global_position", camera_3d.global_position + (mesh.global_position - camera_3d.global_position) * 4 / 5, 1).set_trans(Tween.TRANS_CUBIC)
+	get_tree().paused = true 
+	

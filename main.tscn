@@ -1,9 +1,11 @@
-[gd_scene load_steps=10 format=3 uid="uid://crftkaj2td5qg"]
+[gd_scene load_steps=12 format=3 uid="uid://crftkaj2td5qg"]
 
 [ext_resource type="Script" path="res://main.gd" id="1_3x1y8"]
 [ext_resource type="PackedScene" uid="uid://ww01omwdwjci" path="res://player.tscn" id="1_mi6uc"]
 [ext_resource type="PackedScene" uid="uid://dqfiurxgygg6t" path="res://follower_enemy.tscn" id="2_ould2"]
 [ext_resource type="PackedScene" uid="uid://cyh0btrsibsct" path="res://land_mine.tscn" id="4_t4mpr"]
+[ext_resource type="Script" path="res://restart_manager.gd" id="5_ig8t6"]
+[ext_resource type="Script" path="res://timer_label.gd" id="6_8nesu"]
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_t5jas"]
 size = Vector3(20, 50, 20)
@@ -23,7 +25,6 @@ size = Vector3(20, 10, 20)
 
 [sub_resource type="Environment" id="Environment_bjnye"]
 background_energy_multiplier = 0.37
-fog_enabled = true
 fog_density = 0.0
 fog_height = 1.0
 fog_height_density = 0.0235
@@ -57,10 +58,6 @@ light_volumetric_fog_energy = 15.0
 shadow_enabled = true
 shadow_opacity = 0.5
 
-[node name="FollowerEnemy" parent="." node_paths=PackedStringArray("target") instance=ExtResource("2_ould2")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2.0157, 5.79069)
-target = NodePath("../Player")
-
 [node name="Path3D" type="Path3D" parent="."]
 curve = SubResource("Curve3D_tsstd")
 
@@ -69,9 +66,6 @@ transform = Transform3D(-0.00704187, 0, -0.999969, 0, 1, 0, 0.999969, 0, -0.0070
 
 [node name="EnemySpawnTimer" type="Timer" parent="."]
 autostart = true
-
-[node name="LandMine" parent="." instance=ExtResource("4_t4mpr")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 8.39683, 1.49609, 0)
 
 [node name="MineSpawnTimer" type="Timer" parent="."]
 autostart = true
@@ -89,8 +83,61 @@ shape = SubResource("BoxShape3D_q7wlu")
 [node name="WorldEnvironment" type="WorldEnvironment" parent="."]
 environment = SubResource("Environment_bjnye")
 
+[node name="RestartLayer" type="CanvasLayer" parent="."]
+visible = false
+
+[node name="ColorRect" type="ColorRect" parent="RestartLayer"]
+anchors_preset = -1
+anchor_left = 0.342187
+anchor_top = 0.05
+anchor_right = 0.657812
+anchor_bottom = 0.197222
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0, 0, 0, 1)
+metadata/_edit_use_anchors_ = true
+
+[node name="Label" type="Label" parent="RestartLayer/ColorRect"]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -153.0
+offset_top = -33.5
+offset_right = 153.0
+offset_bottom = 33.5
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_font_sizes/font_size = 48
+text = "R to RESTART"
+
+[node name="RestartManager" type="Node" parent="."]
+process_mode = 3
+script = ExtResource("5_ig8t6")
+
+[node name="TimerLayer" type="CanvasLayer" parent="."]
+
+[node name="TimerLabel" type="Label" parent="TimerLayer"]
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -22.5
+offset_top = 21.0
+offset_right = 22.5
+offset_bottom = 66.0
+grow_horizontal = 2
+size_flags_horizontal = 4
+theme_override_font_sizes/font_size = 32
+text = "0.0"
+horizontal_alignment = 1
+vertical_alignment = 1
+script = ExtResource("6_8nesu")
+
+[connection signal="died" from="Player" to="." method="_on_player_died"]
+[connection signal="died" from="Player" to="RestartManager" method="_on_player_died"]
 [connection signal="timeout" from="EnemySpawnTimer" to="." method="_on_enemy_spawn_timer_timeout"]
 [connection signal="timeout" from="MineSpawnTimer" to="." method="_on_mine_spawn_timer_timeout"]
 [connection signal="body_exited" from="AliveArea" to="." method="_on_alive_area_body_exited"]
-
-[editable path="FollowerEnemy"]

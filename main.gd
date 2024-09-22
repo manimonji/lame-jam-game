@@ -9,7 +9,7 @@ extends Node
 func _on_enemy_spawn_timer_timeout():
 	path_follow_3d.progress_ratio = randf()
 	var enemy = enemy_scene.instantiate()
-	enemy.position = path_follow_3d.position 
+	enemy.position = path_follow_3d.position + Vector3.DOWN
 	enemy.target = $Player
 	get_tree().current_scene.add_child(enemy)
 	#for child in enemy.get_children():
@@ -29,5 +29,4 @@ func _on_mine_spawn_timer_timeout():
 
 func _on_alive_area_body_exited(body: Node3D) -> void:
 	if body.get_groups().has("enemies"):
-		print_debug(body)
 		body.follow_enabled = false
