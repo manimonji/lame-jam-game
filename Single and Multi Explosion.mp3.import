@@ -1,0 +1,19 @@
+[remap]
+
+importer="mp3"
+type="AudioStreamMP3"
+uid="uid://cbnq8jhgaun3n"
+path="res://.godot/imported/Single and Multi Explosion.mp3-3587bed95e78b6b5142f548e31e67c5d.mp3str"
+
+[deps]
+
+source_file="res://Single and Multi Explosion.mp3"
+dest_files=["res://.godot/imported/Single and Multi Explosion.mp3-3587bed95e78b6b5142f548e31e67c5d.mp3str"]
+
+[params]
+
+loop=false
+loop_offset=0
+bpm=0
+beat_count=0
+bar_beats=4

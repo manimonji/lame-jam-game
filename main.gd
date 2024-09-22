@@ -26,3 +26,8 @@ func _on_mine_spawn_timer_timeout():
 	)
 	mine.position = $MineSpawnBaseMarker.position + offset
 	get_tree().current_scene.add_child(mine)
+
+func _on_alive_area_body_exited(body: Node3D) -> void:
+	if body.get_groups().has("enemies"):
+		print_debug(body)
+		body.follow_enabled = false

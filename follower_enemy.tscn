@@ -1,4 +1,4 @@
-[gd_scene load_steps=5 format=3 uid="uid://dqfiurxgygg6t"]
+[gd_scene load_steps=10 format=3 uid="uid://dqfiurxgygg6t"]
 
 [ext_resource type="Script" path="res://follower_enemy.gd" id="1_qcp2w"]
 
@@ -10,9 +10,37 @@ material = SubResource("StandardMaterial3D_uilnl")
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_6jt5d"]
 
-[node name="FollowerEnemy" type="RigidBody3D"]
+[sub_resource type="Curve" id="Curve_oqihu"]
+_data = [Vector2(0, 1), 0.0, 0.0, 0, 0, Vector2(0.73913, 1), 0.0, 0.0, 0, 0, Vector2(1, 0), 0.0, 0.0, 0, 0]
+point_count = 3
+
+[sub_resource type="CurveTexture" id="CurveTexture_sy3dt"]
+curve = SubResource("Curve_oqihu")
+
+[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_xoqpo"]
+emission_shape = 3
+emission_box_extents = Vector3(0, 0.1, 0.5)
+direction = Vector3(-1, 0, 0)
+spread = 23.855
+initial_velocity_min = 4.0
+initial_velocity_max = 4.0
+gravity = Vector3(0, -5, 0)
+scale_min = 0.4
+scale_max = 0.6
+scale_curve = SubResource("CurveTexture_sy3dt")
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_uywph"]
+
+[sub_resource type="SphereMesh" id="SphereMesh_l5pf2"]
+material = SubResource("StandardMaterial3D_uywph")
+radial_segments = 8
+rings = 4
+
+[node name="FollowerEnemy" type="RigidBody3D" groups=["enemies"]]
 collision_layer = 4
 collision_mask = 5
+contact_monitor = true
+max_contacts_reported = 1
 script = ExtResource("1_qcp2w")
 
 [node name="MeshInstance3D" type="MeshInstance3D" parent="."]
@@ -20,3 +48,17 @@ mesh = SubResource("BoxMesh_ejh3d")
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="."]
 shape = SubResource("BoxShape3D_6jt5d")
+
+[node name="DestroyTimer" type="Timer" parent="."]
+wait_time = 5.0
+one_shot = true
+
+[node name="Dust" type="GPUParticles3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.480203, -0.335306, 0)
+amount = 64
+lifetime = 0.75
+fixed_fps = 60
+process_material = SubResource("ParticleProcessMaterial_xoqpo")
+draw_pass_1 = SubResource("SphereMesh_l5pf2")
+
+[connection signal="timeout" from="DestroyTimer" to="." method="_on_destroy_timer_timeout"]

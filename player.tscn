@@ -1,10 +1,33 @@
-[gd_scene load_steps=4 format=3 uid="uid://ww01omwdwjci"]
+[gd_scene load_steps=9 format=3 uid="uid://ww01omwdwjci"]
 
 [ext_resource type="Script" path="res://assets/scirpts/player.gd" id="1_g8yj4"]
 
 [sub_resource type="CapsuleMesh" id="CapsuleMesh_4y10r"]
 
 [sub_resource type="CapsuleShape3D" id="CapsuleShape3D_uxsld"]
+
+[sub_resource type="Curve" id="Curve_ceorm"]
+_data = [Vector2(0, 1), 0.0, 0.0, 0, 0, Vector2(0.768116, 1), 0.0, 0.0, 0, 0, Vector2(1, 0), 0.0, 0.0, 0, 0]
+point_count = 3
+
+[sub_resource type="CurveTexture" id="CurveTexture_2imw4"]
+curve = SubResource("Curve_ceorm")
+
+[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_h817h"]
+direction = Vector3(0, -5, 0)
+initial_velocity_min = 1.0
+initial_velocity_max = 2.0
+gravity = Vector3(0, 0, 0)
+scale_min = 0.3
+scale_max = 0.7
+scale_curve = SubResource("CurveTexture_2imw4")
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_uywph"]
+
+[sub_resource type="SphereMesh" id="SphereMesh_g7yq0"]
+material = SubResource("StandardMaterial3D_uywph")
+radial_segments = 8
+rings = 4
 
 [node name="Player" type="CharacterBody3D"]
 collision_layer = 2
@@ -26,5 +49,18 @@ collision_mask = 4
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="RestartArea"]
 shape = SubResource("CapsuleShape3D_uxsld")
+
+[node name="JumpParticles" type="GPUParticles3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.645171, 0)
+emitting = false
+amount = 14
+lifetime = 0.6
+one_shot = true
+explosiveness = 1.0
+process_material = SubResource("ParticleProcessMaterial_h817h")
+draw_pass_1 = SubResource("SphereMesh_g7yq0")
+
+[node name="AudioListener3D" type="AudioListener3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.656787, 0)
 
 [connection signal="body_entered" from="RestartArea" to="." method="_on_restart_area_body_entered"]

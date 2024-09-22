@@ -15,6 +15,24 @@ run/main_scene="res://main.tscn"
 config/features=PackedStringArray("4.3", "GL Compatibility")
 config/icon="res://icon.svg"
 
+[display]
+
+window/size/viewport_width=1280
+window/size/viewport_height=720
+window/size/mode=3
+
+[editor]
+
+movie_writer/movie_file="D:/Game/lame-jam-game/video.avi"
+
+[filesystem]
+
+import/blender/enabled=false
+
+[global_group]
+
+enemies=""
+
 [input]
 
 move_forward={

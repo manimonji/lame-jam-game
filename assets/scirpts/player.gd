@@ -4,7 +4,6 @@ var invinsible = false:
 	set(value):
 		invinsible = value
 		if value:
-			var tween = get_tree().create_tween()
 			await get_tree().create_timer(5.0).timeout
 			invinsible = false
 			#tween.tween_property($MeshInstance3D.mesh, "mesh")
@@ -14,7 +13,9 @@ const SPEED = 5.0
 @export var gravity: Vector3
 @export var throw_power:= 1.0
 
-func _physics_process(delta):
+@onready var jump_particles: GPUParticles3D = $JumpParticles
+
+func _process(delta):
 	# Add the gravity.
 	if not is_on_floor():
 		velocity += gravity * delta
@@ -22,6 +23,7 @@ func _physics_process(delta):
 	# Handle jump.
 	if Input.is_action_just_pressed("jump") and is_on_floor():
 		velocity.y = JUMP_VELOCITY
+		jump_particles.restart()
 
 	# Get the input direction and handle the movement/deceleration.
 	# As good practice, you should replace UI actions with custom gameplay actions.

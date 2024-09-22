@@ -1,6 +1,8 @@
-[gd_scene load_steps=6 format=3 uid="uid://cyh0btrsibsct"]
+[gd_scene load_steps=8 format=3 uid="uid://cyh0btrsibsct"]
 
 [ext_resource type="Script" path="res://land_mine.gd" id="1_n6shc"]
+[ext_resource type="PackedScene" uid="uid://b3jx7g561ruku" path="res://explosion.tscn" id="2_84vbv"]
+[ext_resource type="PackedScene" uid="uid://twylos0g27lx" path="res://explosion_sound.tscn" id="3_t32bh"]
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_bowtl"]
 albedo_color = Color(0.34881, 0.0756629, 0.976901, 1)
@@ -19,6 +21,8 @@ radius = 2.5
 collision_layer = 8
 script = ExtResource("1_n6shc")
 explotion_power = 10.0
+explosion_scene = ExtResource("2_84vbv")
+explosion_sound_scene = ExtResource("3_t32bh")
 
 [node name="MeshInstance3D" type="MeshInstance3D" parent="."]
 mesh = SubResource("CylinderMesh_8imh8")
